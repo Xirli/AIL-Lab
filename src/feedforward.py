@@ -6,14 +6,16 @@ from random import random
 
 class FeedForward:
     def __init__(self, *count):
-        self.activation = sigmoid
-        self.derivative = sigmoid_derivative
+        self.activation = my
+        self.derivative = my_derivative
         self.speed = 0.1
         self.w = []
         for i in range(len(count)-1):
             self.w.append(get_random_matrix(count[i], count[i+1]))
 
     def think(self, x: list) -> list[float]:
+        for k in range(len(x)):
+            x[k] /= 255
         for w in self.w:
             y = [0.0]*len(w[0])
             for j in range(len(y)):
@@ -36,7 +38,7 @@ class FeedForward:
         count = 1
 
         while count != iteration_count and error > acceptable_error and d_error > delta_error:
-            if count % 1000 == 0:
+            if count % 1 == 0:
                 print(str(count * 100 / iteration_count) + "%; error=" + str(error) + ";")
 
             self.learn_step(dataset)
@@ -51,7 +53,7 @@ class FeedForward:
                 best_w = copy.deepcopy(self.w)
 
 
-            assert d_error > -10000
+            assert d_error > -1000000
 
         self.w = best_w
         # print(self.w)
@@ -129,8 +131,34 @@ def ReLU_derivative(x: float) -> float:
     return 1
 
 
+def my(x: float) -> float:
+    if x <= -5:
+        return 0
+    elif x <= -1:
+        return 0.4 + x*0.1
+    elif x <= 1:
+        return 0.5 + x*0.2
+    elif x <= 5:
+        return 0.6 + x*0.1
+    else:
+        return 1
+
+
+def my_derivative(x: float) -> float:
+    if x <= -5:
+        return 0.01
+    elif x <= -1:
+        return 0.1
+    elif x <= 1:
+        return 0.2
+    elif x <= 5:
+        return 0.1
+    else:
+        return 0.01
+
+
 def sigmoid(x: float) -> float:
-    return 1/(1+exp(-x))*10
+    return 1/(1+exp(-x))
 
 
 def sigmoid_derivative(x: float) -> float:
