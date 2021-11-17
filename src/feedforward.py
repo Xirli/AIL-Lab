@@ -8,14 +8,12 @@ class FeedForward:
     def __init__(self, *count):
         self.activation = my
         self.derivative = my_derivative
-        self.speed = 0.1
+        self.speed = 8
         self.w = []
         for i in range(len(count)-1):
             self.w.append(get_random_matrix(count[i], count[i+1]))
 
     def think(self, x: list) -> list[float]:
-        for k in range(len(x)):
-            x[k] /= 255
         for w in self.w:
             y = [0.0]*len(w[0])
             for j in range(len(y)):
@@ -102,6 +100,7 @@ class FeedForward:
                     for j in range(len(self.w[k][i])):
                         deriv = self.derivative(neurons_in[k][j])
                         dw[k][i][j] += self.speed * err[k+1][j] * deriv * neurons_out[k][i]
+
                         # self.w[k][i][j] += self.speed * err[k+1][j] * deriv * neurons_out[k][i]
 
         for k in range(len(self.w)):
